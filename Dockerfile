@@ -12,7 +12,7 @@ RUN make build-linux
 # higress-registry.cn-hangzhou.cr.aliyuncs.com
 FROM higress-registry.us-west-1.cr.aliyuncs.com/higress/higress:v2.2.0
 
-COPY --from=build out/linux_amd64/higress /usr/local/bin/higress
+COPY --from=build /opt/out/linux_amd64/higress /usr/local/bin/higress
 
 USER 1337:1337
 ENTRYPOINT ["/usr/local/bin/higress"]
