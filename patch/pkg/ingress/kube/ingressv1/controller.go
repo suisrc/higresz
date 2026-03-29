@@ -1089,7 +1089,7 @@ func (c *controller) backendToRouteDestination(backend *ingress.IngressBackend, 
 
 func resolveNamespace(svc *ingress.IngressServiceBackend, def string) string {
 	// [service]---[namespace]
-	before, after, found := strings.Cut(svc.Name[:len(svc.Name)-4], "---")
+	before, after, found := strings.Cut(svc.Name, "---")
 	if found {
 		svc.Name = before
 		return after
