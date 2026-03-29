@@ -1,0 +1,37 @@
+name: build
+
+on:
+  push:
+    # branches: [ main ]
+    tags: [ "v*.*.*" ]
+
+
+env:
+  IMAGE_NAME: suisrc/higresz
+  GITHUB_REGISTRY: ghcr.io
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          echo "IMAGE_VERSION=$TAG_NAME" >> $GITHUB_ENV
+          docker build -t image --no-cache .
+
+      - name: Push github image
+        run: |
+          REGISTRY_URL=$GITHUB_REGISTRY
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login $REGISTRY_URL -u ${{ github.actor }} --password-stdin
+
+          IMAGE_ID=$REGISTRY_URL/$IMAGE_NAME
+          echo IMAGE_ID=$IMAGE_ID
+          VERSION=$IMAGE_VERSION
+          echo VERSION=$VERSION
+
+          docker tag image $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
