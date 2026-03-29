@@ -8,7 +8,9 @@ RUN git clone --depth 1 -b release-2.2.0 https://github.com/alibaba/higress.git 
 COPY patch .
 RUN make build-linux
 
-FROM higress-registry.cn-hangzhou.cr.aliyuncs.com/higress/base:latest-amd64
+# higress-registry.us-west-1.cr.aliyuncs.com
+# higress-registry.cn-hangzhou.cr.aliyuncs.com
+FROM higress-registry.us-west-1.cr.aliyuncs.com/higress/higress:v2.2.0
 
 COPY --from=build out/linux_amd64/higress /usr/local/bin/higress
 
